@@ -109,6 +109,7 @@ if __name__ == "__main__":
     os.environ["OPENAI_API_TYPE"] = "azure"
     os.environ["OPENAI_API_VERSION"] = "2023-05-15"
     os.environ["OPENAI_API_BASE"] = "https://pvg-azure-openai-uk-south.openai.azure.com/openai"
+    os.environ["AZURE_OPENAI_API_KEY"] = "8d1daadc333e42b18e26d861588cfd43"
     env_path = os.getenv("HOME") + "/Downloads/.env"
     load_dotenv(dotenv_path=env_path, verbose=True)
 
