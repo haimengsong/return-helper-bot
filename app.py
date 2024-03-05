@@ -95,7 +95,7 @@ def launch_ui():
         with st.chat_message("user"):
             st.markdown(user_input)
 
-    ai_response = chat(user_input, st.session_state.history)
+    ai_response = chat(user_input, st.session_state.messages)
 
     st.session_state.messages.append({"role": "user", "content": user_input})
 
