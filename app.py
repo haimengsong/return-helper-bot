@@ -35,15 +35,6 @@ def upload_pdf():
 
     return pdf_list
 
-def get_pdf_text(pdf_path):
-    text = ""
-    pdf_file = open(pdf_path, 'rb')
-    pdf_reader = PdfReader(pdf_file)
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-
-    return text
-
 def get_text_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
@@ -62,8 +53,15 @@ def save_vector_store(textChunks):
 def initialize_db():
     global pdf_list
     pdf_list = upload_pdf()
-    raw_text = get_pdf_text(pdf_list)
-    text_chunks = get_text_chunks(raw_text)
+
+    text = ""
+    # 使用 PyPDF2 的 PdfReader 读取 pdf 文件
+    pdf_reader = PdfReader(pdf_list)
+
+    for page in pdf_reader.pages:
+        text += page.extract_text()
+
+    text_chunks = get_text_chunks(text)
 
     db = save_vector_store(text_chunks)
     llm = AzureChatOpenAI(model_name="gpt-35-turbo", temperature=0.5)
