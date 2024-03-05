@@ -139,4 +139,5 @@ if __name__ == "__main__":
     # env_path = os.getenv("HOME") + "/Downloads/.env"
     # load_dotenv(dotenv_path=env_path, verbose=True)
     set_api_key()
+    upload_pdf()
     launch_ui()
