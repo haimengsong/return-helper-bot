@@ -13,6 +13,15 @@ import os
 # from dotenv import load_dotenv
 
 from PyPDF2 import PdfReader
+
+st.set_page_config(
+        page_title="PDF QA",
+        page_icon=" ",
+        layout="wide"
+    )
+
+st.title(" PDF ChatBot")
+
 def set_api_key():
     user_api_key = st.sidebar.text_input(
         label="#### 在此填入API key填写完成后回车 ",
@@ -90,13 +99,6 @@ def chat(message, history):
         return "I don't know."
 
 def launch_ui():
-    st.set_page_config(
-        page_title="ReturnHelper",
-        page_icon=" ",
-        layout="wide"
-    )
-    st.title(" Return Helper ChatBot")
-
     # 如果会话状态中没有"messages"这个键，就创建一个空列表
     if "messages" not in st.session_state:
         st.session_state.messages = []
