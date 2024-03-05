@@ -4,23 +4,17 @@ from langchain.embeddings import AzureOpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain.chat_models import AzureChatOpenAI
-from langchain.text_splitter import (
-    RecursiveCharacterTextSplitter,
-    Language,
-)
-
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
-# from dotenv import load_dotenv
 
 from PyPDF2 import PdfReader
 
 st.set_page_config(
-        page_title="PDF QA",
+        page_title="PDF QA ChatBot",
         page_icon=" ",
         layout="wide"
     )
-
-st.title(" PDF ChatBot")
+st.title(" PDF问答机器人")
 
 def set_api_key():
     user_api_key = st.sidebar.text_input(
@@ -29,10 +23,9 @@ def set_api_key():
         type="password")
     if user_api_key:
         os.environ["OPENAI_API_KEY"] = user_api_key
-        # openai.api_key = user_api_key
         st.sidebar.write(" 填入成功下一步选取pdf")
 
-def upload_pdf():
+def set_pdf_upload():
     # 在侧边栏设置标题
     st.sidebar.title("请选择PDF文件")
 
@@ -98,7 +91,7 @@ def chat(message, history):
     else:
         return "I don't know."
 
-def launch_ui():
+def set_chat_ui():
     # 如果会话状态中没有"messages"这个键，就创建一个空列表
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -121,13 +114,11 @@ def launch_ui():
                 # 在会话状态的消息列表中添加助手的回答
                 st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-        if pdf_list is None:
-            message_placeholder = st.empty()
-            message_placeholder.markdown("请先上传PDF文件..")
-
         if os.environ["AZURE_OPENAI_API_KEY"] is None:
-            message_placeholder = st.empty()
-            message_placeholder.markdown("请先输入API Key..")
+            st.empty().markdown("请先输入您的API Key")
+
+        if pdf_list is None:
+            st.empty().markdown("请先上传您的PDF文件")
 
     if len(st.session_state.messages) > 20:
         st.session_state.messages = st.session_state.messages[-20]
@@ -137,9 +128,7 @@ if __name__ == "__main__":
     os.environ["OPENAI_API_TYPE"] = "azure"
     os.environ["OPENAI_API_VERSION"] = "2023-05-15"
     os.environ["OPENAI_API_BASE"] = "https://pvg-azure-openai-uk-south.openai.azure.com/openai"
-    # os.environ["AZURE_OPENAI_API_KEY"] = "8d1daadc333e42b18e26d861588cfd43"
-    # env_path = os.getenv("HOME") + "/Downloads/.env"
-    # load_dotenv(dotenv_path=env_path, verbose=True)
+
     set_api_key()
-    upload_pdf()
-    launch_ui()
+    set_pdf_upload()
+    set_chat_ui()
